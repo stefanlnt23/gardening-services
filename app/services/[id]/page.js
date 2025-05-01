@@ -67,18 +67,42 @@ export default function ServiceDetail() {
   useEffect(() => {
     const fetchService = async () => {
       try {
+        console.log('Fetching service with ID:', params.id);
+        
+        if (!params.id) {
+          console.error('Invalid service ID in params');
+          setError('Invalid service ID');
+          setLoading(false);
+          return;
+        }
+        
+        // Add a small delay to ensure MongoDB connection is ready
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const res = await fetch(`/api/services/${params.id}`, {
-          cache: 'no-store' // Disable caching to ensure fresh data
+          cache: 'no-store', // Disable caching to ensure fresh data
+          headers: {
+            'Accept': 'application/json',
+          }
         });
+        
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
+        
+        if (!res.ok) {
+          console.error('Error response from API:', data);
+          throw new Error(data.error || 'Failed to load service details');
+        }
+        
+        console.log('Service data received:', data._id);
         setService(data);
       } catch (err) {
-        setError('Failed to load service details');
+        console.error('Error fetching service:', err);
+        setError(`Failed to load service details: ${err.message}`);
       } finally {
         setLoading(false);
       }
     };
+    
     fetchService();
   }, [params.id]);
 

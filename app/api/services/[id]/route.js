@@ -7,22 +7,47 @@ import { authOptions } from '../../auth/[...nextauth]/route';
 // GET service by ID
 export async function GET(request, { params }) {
   try {
-    await connectToDatabase();
+    console.log('Service detail API called for ID:', params.id);
     
-    const service = await Service.findById(params.id)
-      .populate('category', 'name');
-    
-    if (!service) {
+    if (!params.id) {
+      console.error('Invalid service ID provided:', params.id);
       return NextResponse.json(
-        { error: 'Service not found' },
-        { status: 404 }
+        { error: 'Invalid service ID' },
+        { status: 400 }
       );
     }
 
-    return NextResponse.json(service);
+    await connectToDatabase();
+    console.log('Database connected, attempting to find service with ID:', params.id);
+    
+    try {
+      const service = await Service.findById(params.id)
+        .populate('category', 'name');
+      
+      if (!service) {
+        console.log('Service not found for ID:', params.id);
+        return NextResponse.json(
+          { error: 'Service not found' },
+          { status: 404 }
+        );
+      }
+
+      console.log('Service found successfully:', service._id);
+      return NextResponse.json(service);
+    } catch (findError) {
+      console.error('Error finding service:', findError.message);
+      return NextResponse.json(
+        { error: `Error finding service: ${findError.message}` },
+        { status: 500 }
+      );
+    }
   } catch (error) {
+    console.error('Unexpected error in service detail API:', error);
     return NextResponse.json(
-      { error: error.message },
+      { 
+        error: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
       { status: 500 }
     );
   }

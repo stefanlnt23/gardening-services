@@ -220,8 +220,9 @@ export default function Home() {
                           src={service.photos[0]}
                           alt={service.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           style={{ objectFit: 'cover' }}
-                          loading="lazy" // Added lazy loading
+                          loading="lazy"
                         />
                       </div>
                     )}
@@ -305,8 +306,9 @@ export default function Home() {
                             src={project.photos[0]}
                             alt={project.title}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             style={{ objectFit: 'cover' }}
-                            loading="lazy" // Added lazy loading
+                            loading="lazy"
                           />
                         </div>
                       )}
