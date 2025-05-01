@@ -15,7 +15,9 @@ export default function Services() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
+        const res = await fetch('/api/categories', {
+          cache: 'no-store' // Disable caching to ensure fresh data
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
         setCategories(data);
@@ -34,7 +36,9 @@ export default function Services() {
       if (params.search) queryParams.set('search', params.search);
       
       const url = `/api/services?${queryParams.toString()}`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        cache: 'no-store' // Disable caching to ensure fresh data
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setServices(data);

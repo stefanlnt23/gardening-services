@@ -20,7 +20,9 @@ export default function ServiceDetail() {
     if (service?.category?._id) {
       const fetchRelatedServices = async () => {
         try {
-          const res = await fetch(`/api/services?category=${service.category._id}`);
+          const res = await fetch(`/api/services?category=${service.category._id}`, {
+            cache: 'no-store' // Disable caching to ensure fresh data
+          });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error);
           setRelatedServices(data.filter(s => s._id !== service._id).slice(0, 3));
@@ -65,7 +67,9 @@ export default function ServiceDetail() {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const res = await fetch(`/api/services/${params.id}`);
+        const res = await fetch(`/api/services/${params.id}`, {
+          cache: 'no-store' // Disable caching to ensure fresh data
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
         setService(data);

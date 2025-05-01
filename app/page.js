@@ -82,7 +82,7 @@ export default function Home() {
       // Fetch featured projects
       try {
         const projectsResponse = await fetch('/api/featured-projects', { 
-          next: { revalidate: 3600 }, // Cache for 1 hour
+          cache: 'no-store', // Disable caching to ensure fresh data
           headers: {
             'Accept': 'application/json',
           }
@@ -99,7 +99,7 @@ export default function Home() {
       // Fetch featured services
       try {
         const servicesResponse = await fetch('/api/featured-services', {
-          next: { revalidate: 3600 }, // Cache for 1 hour
+          cache: 'no-store', // Disable caching to ensure fresh data
           headers: {
             'Accept': 'application/json',
           }
