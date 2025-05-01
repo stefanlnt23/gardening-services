@@ -7,7 +7,8 @@ const nextConfig = {
       'i.imgur.com',
       'imgur.com',
       'cloudinary.com',
-      'res.cloudinary.com'
+      'res.cloudinary.com',
+      'i.postimg.cc'
     ],
   },
 };

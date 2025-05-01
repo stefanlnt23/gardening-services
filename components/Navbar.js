@@ -8,7 +8,7 @@ export default function NavbarComponent() {
   const { data: session } = useSession();
 
   return (
-    <Navbar bg="success" variant="dark" expand="lg">
+    <Navbar bg="success" variant="dark" expand="lg" style={{ position: 'relative', zIndex: '1000' }}>
       <Container>
         <Navbar.Brand as={Link} href="/">
           <img

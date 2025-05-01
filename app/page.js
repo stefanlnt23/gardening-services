@@ -42,7 +42,6 @@ export default function Home() {
     setContactSuccess(false);
 
     try {
-      console.log('Submitting contact form:', contactForm);
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -52,7 +51,6 @@ export default function Home() {
       });
 
       const data = await response.json();
-      console.log('Response from server:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to submit form');
@@ -73,7 +71,6 @@ export default function Home() {
         formElement.scrollIntoView({ behavior: 'smooth' });
       }
     } catch (err) {
-      console.error('Form submission error:', err);
       setContactError(err.message);
     } finally {
       setContactLoading(false);
@@ -85,19 +82,15 @@ export default function Home() {
       // Fetch featured projects
       try {
         const projectsResponse = await fetch('/api/featured-projects', { 
-          cache: 'no-store',
+          next: { revalidate: 3600 }, // Cache for 1 hour
           headers: {
             'Accept': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
           }
         });
         if (!projectsResponse.ok) throw new Error('Failed to fetch featured projects');
         const featured = await projectsResponse.json();
-        console.log('Featured projects from API:', featured);
         setFeaturedProjects(featured);
       } catch (err) {
-        console.error('Error fetching projects:', err);
         setProjectsError(err.message);
       } finally {
         setProjectsLoading(false);
@@ -106,19 +99,15 @@ export default function Home() {
       // Fetch featured services
       try {
         const servicesResponse = await fetch('/api/featured-services', {
-          cache: 'no-store',
+          next: { revalidate: 3600 }, // Cache for 1 hour
           headers: {
             'Accept': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
           }
         });
         if (!servicesResponse.ok) throw new Error('Failed to fetch featured services');
         const featuredServices = await servicesResponse.json();
-        console.log('Featured services from API:', featuredServices);
         setServices(featuredServices);
       } catch (err) {
-        console.error('Error fetching services:', err);
         setServicesError(err.message);
       } finally {
         setServicesLoading(false);
@@ -126,10 +115,7 @@ export default function Home() {
     };
 
     fetchData();
-
-    // Add interval to refresh data periodically
-    const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
+    // Removed interval that was causing unnecessary refreshes
   }, []);
 
   // Service icons mapping
@@ -164,11 +150,20 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <div className="overflow-hidden"> {/* Added overflow-hidden to prevent lateral swiping */}
       {/* Hero Section */}
       <div className="hero-section position-relative bg-success text-white py-5" style={{ minHeight: '80vh' }}>
-        <div className="position-absolute top-0 end-0" style={{ width: '400px', height: '400px', background: '#8B6D2B', borderRadius: '50%', opacity: '0.5', transform: 'translate(20%, -20%)' }}></div>
-        <Container className="py-5">
+        {/* Adjusted positioning to prevent overflow */}
+        <div className="position-absolute top-0 end-0" style={{ 
+          width: '400px', 
+          height: '400px', 
+          background: '#8B6D2B', 
+          borderRadius: '50%', 
+          opacity: '0.5', 
+          transform: 'translate(20%, -20%)',
+          zIndex: '1' // Ensure it doesn't overlap with navbar
+        }}></div>
+        <Container className="py-5 position-relative" style={{ zIndex: '2' }}> {/* Added z-index to ensure content is above decorative elements */}
           <Row className="align-items-center min-vh-75">
             <Col md={8} className="text-center text-md-start">
               <h1 className="display-2 fw-bold mb-4">Transformă-ți Spațiul Exterior</h1>
@@ -180,8 +175,8 @@ export default function Home() {
             </Col>
           </Row>
         </Container>
-        <div className="position-absolute bottom-0 w-100">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <div className="position-absolute bottom-0 w-100" style={{ zIndex: '1' }}> {/* Added z-index */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ display: 'block' }}> {/* Added display block to prevent SVG spacing issues */}
             <path fill="#ffffff" fillOpacity="1" d="M0,96L80,112C160,128,320,160,480,160C640,160,800,128,960,112C1120,96,1280,96,1360,96L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
           </svg>
         </div>
@@ -216,6 +211,7 @@ export default function Home() {
                           alt={service.title}
                           fill
                           style={{ objectFit: 'cover' }}
+                          loading="lazy" // Added lazy loading
                         />
                       </div>
                     )}
@@ -242,28 +238,31 @@ export default function Home() {
         </Container>
       </section>
 
-{/* About Section */}
-<section className="py-5 bg-light">
-  <Container>
-    <Row className="align-items-center">
-      <Col md={6}>
-        <h2 className="text-success mb-4">Despre Flori și Frunze</h2>
-        <p>Înființată în 2008, Flori și Frunze a transformat spații exterioare din întreaga regiune cu serviciile noastre experte de grădinărit și amenajare peisagistică. Echipa noastră de horticultori certificați și designeri peisagiști sunt pasionați de crearea unor grădini frumoase și sustenabile care prosperă în clima noastră locală.</p>
-        <p>Ne mândrim cu atenția la detalii, practicile sustenabile și angajamentul față de satisfacția clienților. Lasă-ne să te ajutăm să creezi și să întreții spațiul exterior la care ai visat întotdeauna.</p>
-      </Col>
-      <Col md={6} className="text-center">
-        <div className="p-4 rounded-3 shadow-sm">
-          <img 
-            src="https://i.postimg.cc/Rmgf9BZF/logo.png"
-            alt="Logo Flori și Frunze"
-            style={{ maxWidth: '100%', height: 'auto', maxHeight: '300px', objectFit: 'contain' }}
-            className="img-fluid"
-          />
-        </div>
-      </Col>
-    </Row>
-  </Container>
-</section>
+      {/* About Section */}
+      <section className="py-5 bg-light">
+        <Container>
+          <Row className="align-items-center">
+            <Col md={6}>
+              <h2 className="text-success mb-4">Despre Flori și Frunze</h2>
+              <p>Înființată în 2008, Flori și Frunze a transformat spații exterioare din întreaga regiune cu serviciile noastre experte de grădinărit și amenajare peisagistică. Echipa noastră de horticultori certificați și designeri peisagiști sunt pasionați de crearea unor grădini frumoase și sustenabile care prosperă în clima noastră locală.</p>
+              <p>Ne mândrim cu atenția la detalii, practicile sustenabile și angajamentul față de satisfacția clienților. Lasă-ne să te ajutăm să creezi și să întreții spațiul exterior la care ai visat întotdeauna.</p>
+            </Col>
+            <Col md={6} className="text-center">
+              <div className="p-4 rounded-3 shadow-sm">
+                <Image 
+                  src="/logo.png"
+                  alt="Logo Flori și Frunze"
+                  width={300}
+                  height={300}
+                  style={{ objectFit: 'contain' }}
+                  className="img-fluid"
+                />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
       {/* Featured Projects */}
       <section className="py-5">
         <Container>
@@ -297,6 +296,7 @@ export default function Home() {
                             alt={project.title}
                             fill
                             style={{ objectFit: 'cover' }}
+                            loading="lazy" // Added lazy loading
                           />
                         </div>
                       )}
@@ -507,6 +507,6 @@ export default function Home() {
           </Row>
         </Container>
       </section>
-    </>
+    </div>
   );
 }
