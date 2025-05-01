@@ -165,16 +165,6 @@ export default function Home() {
         }}></div>
         <Container className="py-5 position-relative" style={{ zIndex: '2' }}> {/* Added z-index to ensure content is above decorative elements */}
           <Row className="align-items-center min-vh-75">
-            <Col md={4} className="text-center mb-4 mb-md-0">
-              <Image 
-                src="https://i.postimg.cc/Rmgf9BZF/logo.png"
-                alt="Logo Flori și Frunze"
-                width={250}
-                height={250}
-                style={{ objectFit: 'contain' }}
-                className="img-fluid"
-              />
-            </Col>
             <Col md={8} className="text-center text-md-start">
               <h1 className="display-2 fw-bold mb-4">Transformă-ți Spațiul Exterior</h1>
               <p className="lead mb-4">Servicii profesionale de grădinărit pentru a crea și întreține grădina visurilor tale</p>
