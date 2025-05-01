@@ -280,7 +280,7 @@ export default function ServiceDetail() {
                   <div className="p-4">
                     <h3 className="h5 mb-3">{relatedService.title}</h3>
                     <p className="text-muted small mb-3">
-                      {relatedService.description.substring(0, 100)}...
+                      {relatedService.description.substring(0, 100)}&hellip;
                     </p>
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="text-success">£{relatedService.price}</span>

@@ -187,7 +187,7 @@ export default function CreateService() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>What's Included</Form.Label>
+          <Form.Label>What&apos;s Included</Form.Label>
           <Form.Control
             as="textarea"
             name="whatsIncluded"
@@ -196,7 +196,7 @@ export default function CreateService() {
             required
             maxLength={1000}
             rows={4}
-            placeholder="Enter what's included in the service"
+            placeholder="Enter what&apos;s included in the service"
           />
         </Form.Group>
 

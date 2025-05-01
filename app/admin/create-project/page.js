@@ -23,6 +23,12 @@ export default function CreateProject() {
   const { data: session } = useSession();
 
   useEffect(() => {
+    // Redirect if not admin
+    if (!session?.user?.isAdmin) {
+      router.push('/');
+      return;
+    }
+
     const fetchServices = async () => {
       try {
         const res = await fetch('/api/services');
@@ -34,11 +40,9 @@ export default function CreateProject() {
       }
     };
     fetchServices();
-  }, []);
+  }, [session, router]);
 
-  // Redirect if not admin
   if (!session?.user?.isAdmin) {
-    router.push('/');
     return null;
   }
 
