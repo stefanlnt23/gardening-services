@@ -147,7 +147,7 @@ export default function AdminServices() {
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete the service &quot;{serviceToDelete?.title}&quot;? This action cannot be undone.
+          Are you sure you want to delete the service, This action cannot be undone.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
