@@ -12,7 +12,7 @@ export default function NavbarComponent() {
       <Container>
         <Navbar.Brand as={Link} href="/">
           <img
-            src="https://i.postimg.cc/Rmgf9BZF/logo.png" // Add your logo in the public folder
+            src="https://i.postimg.cc/Rmgf9BZF/logo.png" // Logo hosted on Postimg
             width="30"
             height="30"
             className="d-inline-block align-top me-2"

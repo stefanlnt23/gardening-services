@@ -250,7 +250,7 @@ export default function Home() {
             <Col md={6} className="text-center">
               <div className="p-4 rounded-3 shadow-sm">
                 <Image 
-                  src="/logo.png"
+                  src="https://i.postimg.cc/Rmgf9BZF/logo.png"
                   alt="Logo Flori și Frunze"
                   width={300}
                   height={300}
