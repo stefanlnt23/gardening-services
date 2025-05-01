@@ -99,7 +99,7 @@ export default function Login() {
               </div>
               
               <div className="text-center mt-3">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/register" className="text-success">
                   Register here
                 </Link>

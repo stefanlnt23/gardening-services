@@ -21,16 +21,17 @@ export default function EditProject({ params: paramsPromise }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [availableServices, setAvailableServices] = useState([]);
+  const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const router = useRouter();
   const { data: session } = useSession();
 
-  // Redirect if not admin
-  if (!session?.user?.isAdmin) {
-    router.push('/');
-    return null;
-  }
-
   useEffect(() => {
+    // Redirect if not admin
+    if (!session?.user?.isAdmin) {
+      router.push('/');
+      return;
+    }
+
     const fetchData = async () => {
       try {
         // Fetch project data
@@ -62,9 +63,7 @@ export default function EditProject({ params: paramsPromise }) {
     };
 
     fetchData();
-  }, [params.id]);
-
-  const [newPhotoUrl, setNewPhotoUrl] = useState('');
+  }, [params.id, session, router]);
 
   const handleAddPhoto = () => {
     if (!newPhotoUrl) {

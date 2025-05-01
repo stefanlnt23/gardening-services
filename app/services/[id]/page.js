@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Carousel, Card } from 'react-bootstrap';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
@@ -37,30 +37,30 @@ export default function ServiceDetail() {
     setShowModal(true);
   };
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
     setSelectedImageIndex((prev) => 
       prev === 0 ? service.photos.length - 1 : prev - 1
     );
-  };
+  }, [service?.photos?.length]);
 
-  const handleNextImage = () => {
+  const handleNextImage = useCallback(() => {
     setSelectedImageIndex((prev) => 
       prev === service.photos.length - 1 ? 0 : prev + 1
     );
-  };
+  }, [service?.photos?.length]);
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = useCallback((e) => {
     if (showModal) {
       if (e.key === 'ArrowLeft') handlePrevImage();
       if (e.key === 'ArrowRight') handleNextImage();
       if (e.key === 'Escape') setShowModal(false);
     }
-  };
+  }, [showModal, handlePrevImage, handleNextImage, setShowModal]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [showModal]);
+  }, [showModal, handleKeyPress]);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -170,7 +170,7 @@ export default function ServiceDetail() {
                     <div>
                       <h3 className="h6 mb-2">Increased Property Value</h3>
                       <p className="text-muted small mb-0">
-                        A well-designed garden can significantly increase your property's market value.
+                        A well-designed garden can significantly increase your property&apos;s market value.
                       </p>
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export default function ServiceDetail() {
 
             {/* What's Included */}
             <div className="bg-white rounded-3 shadow-sm p-4 mb-4">
-              <h2 className="h4 text-success mb-4">What's Included</h2>
+              <h2 className="h4 text-success mb-4">What&apos;s Included</h2>
               <Row>
                 <Col md={6}>
                   {service.whatsIncluded.split('\n').map((item, index) => (

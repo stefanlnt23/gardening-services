@@ -35,32 +35,33 @@ export default function ManageInquiries() {
     console.log('Session status:', sessionStatus);
     console.log('User:', session?.user);
     console.log('Fetching inquiries...');
+
+    const fetchInquiries = async () => {
+      try {
+        const url = filterStatus 
+          ? `/api/contact?status=${filterStatus}`
+          : '/api/contact';
+        
+        console.log('Fetching from URL:', url);
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch inquiries');
+        }
+        
+        const data = await response.json();
+        console.log('Fetched inquiries:', data);
+        setInquiries(data);
+      } catch (err) {
+        console.error('Error fetching inquiries:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchInquiries();
   }, [filterStatus, session, sessionStatus, router]);
-
-  const fetchInquiries = async () => {
-    try {
-      const url = filterStatus 
-        ? `/api/contact?status=${filterStatus}`
-        : '/api/contact';
-      
-      console.log('Fetching from URL:', url);
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch inquiries');
-      }
-      
-      const data = await response.json();
-      console.log('Fetched inquiries:', data);
-      setInquiries(data);
-    } catch (err) {
-      console.error('Error fetching inquiries:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleShowModal = (inquiry) => {
     setSelectedInquiry(inquiry);
@@ -92,8 +93,8 @@ export default function ManageInquiries() {
         throw new Error(data.error || 'Failed to update inquiry');
       }
 
-      // Refresh inquiries list
-      await fetchInquiries();
+      // Refresh inquiries by updating filterStatus
+      setFilterStatus(prev => prev);
       setShowModal(false);
       setError(''); // Clear any previous errors
     } catch (err) {

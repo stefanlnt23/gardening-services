@@ -18,6 +18,7 @@ export default function CreateProject() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [availableServices, setAvailableServices] = useState([]);
+  const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -40,8 +41,6 @@ export default function CreateProject() {
     router.push('/');
     return null;
   }
-
-  const [newPhotoUrl, setNewPhotoUrl] = useState('');
 
   const handleAddPhoto = () => {
     if (!newPhotoUrl) {

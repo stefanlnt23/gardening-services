@@ -1,5 +1,6 @@
 import NavbarComponent from '@/components/Navbar';
 import Providers from '@/components/Providers';
+import Link from 'next/link';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './globals.css';
@@ -49,24 +50,24 @@ export default function RootLayout({ children }) {
                 <div className="col-lg-3 mb-4">
                   <h5 className="mb-3">Quick Links</h5>
                   <ul className="list-unstyled">
-                    <li className="mb-2"><a href="/" className="text-white text-decoration-none">Home</a></li>
-                    <li className="mb-2"><a href="/services" className="text-white text-decoration-none">Services</a></li>
-                    <li className="mb-2"><a href="/about" className="text-white text-decoration-none">About Us</a></li>
-                    <li className="mb-2"><a href="/gallery" className="text-white text-decoration-none">Gallery</a></li>
-                    <li className="mb-2"><a href="/testimonials" className="text-white text-decoration-none">Testimonials</a></li>
-                    <li className="mb-2"><a href="/contact" className="text-white text-decoration-none">Contact</a></li>
+                    <li className="mb-2"><Link href="/" className="text-white text-decoration-none">Home</Link></li>
+                    <li className="mb-2"><Link href="/services" className="text-white text-decoration-none">Services</Link></li>
+                    <li className="mb-2"><Link href="/about" className="text-white text-decoration-none">About Us</Link></li>
+                    <li className="mb-2"><Link href="/gallery" className="text-white text-decoration-none">Gallery</Link></li>
+                    <li className="mb-2"><Link href="/testimonials" className="text-white text-decoration-none">Testimonials</Link></li>
+                    <li className="mb-2"><Link href="/contact" className="text-white text-decoration-none">Contact</Link></li>
                   </ul>
                 </div>
                 
                 <div className="col-lg-3 mb-4">
                   <h5 className="mb-3">Services</h5>
                   <ul className="list-unstyled">
-                    <li className="mb-2"><a href="/services/garden-design" className="text-white text-decoration-none">Garden Design</a></li>
-                    <li className="mb-2"><a href="/services/lawn-maintenance" className="text-white text-decoration-none">Lawn Maintenance</a></li>
-                    <li className="mb-2"><a href="/services/seasonal-planting" className="text-white text-decoration-none">Seasonal Planting</a></li>
-                    <li className="mb-2"><a href="/services/irrigation-systems" className="text-white text-decoration-none">Irrigation Systems</a></li>
-                    <li className="mb-2"><a href="/services/landscape-lighting" className="text-white text-decoration-none">Landscape Lighting</a></li>
-                    <li className="mb-2"><a href="/services/hardscaping" className="text-white text-decoration-none">Hardscaping</a></li>
+                    <li className="mb-2"><Link href="/services/garden-design" className="text-white text-decoration-none">Garden Design</Link></li>
+                    <li className="mb-2"><Link href="/services/lawn-maintenance" className="text-white text-decoration-none">Lawn Maintenance</Link></li>
+                    <li className="mb-2"><Link href="/services/seasonal-planting" className="text-white text-decoration-none">Seasonal Planting</Link></li>
+                    <li className="mb-2"><Link href="/services/irrigation-systems" className="text-white text-decoration-none">Irrigation Systems</Link></li>
+                    <li className="mb-2"><Link href="/services/landscape-lighting" className="text-white text-decoration-none">Landscape Lighting</Link></li>
+                    <li className="mb-2"><Link href="/services/hardscaping" className="text-white text-decoration-none">Hardscaping</Link></li>
                   </ul>
                 </div>
                 
