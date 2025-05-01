@@ -20,6 +20,31 @@ export default function ManageInquiries() {
   const [inquiryStatus, setInquiryStatus] = useState('New');
   const [scheduledDate, setScheduledDate] = useState('');
 
+  // Define fetchInquiries outside useEffect to avoid the missing dependency warning
+  const fetchInquiries = async () => {
+    try {
+      const url = filterStatus 
+        ? `/api/contact?status=${filterStatus}`
+        : '/api/contact';
+      
+      console.log('Fetching from URL:', url);
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch inquiries');
+      }
+      
+      const data = await response.json();
+      console.log('Fetched inquiries:', data);
+      setInquiries(data);
+    } catch (err) {
+      console.error('Error fetching inquiries:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (sessionStatus === 'loading') {
       console.log('Session loading...');
@@ -36,32 +61,8 @@ export default function ManageInquiries() {
     console.log('User:', session?.user);
     console.log('Fetching inquiries...');
 
-    const fetchInquiries = async () => {
-      try {
-        const url = filterStatus 
-          ? `/api/contact?status=${filterStatus}`
-          : '/api/contact';
-        
-        console.log('Fetching from URL:', url);
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch inquiries');
-        }
-        
-        const data = await response.json();
-        console.log('Fetched inquiries:', data);
-        setInquiries(data);
-      } catch (err) {
-        console.error('Error fetching inquiries:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchInquiries();
-  }, [filterStatus, session, sessionStatus, router]);
+  }, [filterStatus, session, sessionStatus, router, fetchInquiries]);
 
   const handleShowModal = (inquiry) => {
     setSelectedInquiry(inquiry);

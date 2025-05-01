@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function CreateProject() {
   const [title, setTitle] = useState('');
@@ -22,30 +23,7 @@ export default function CreateProject() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    // Redirect if not admin
-    if (!session?.user?.isAdmin) {
-      router.push('/');
-      return;
-    }
-
-    const fetchServices = async () => {
-      try {
-        const res = await fetch('/api/services');
-        if (!res.ok) throw new Error('Failed to fetch services');
-        const data = await res.json();
-        setAvailableServices(data);
-      } catch (err) {
-        setError('Failed to load services');
-      }
-    };
-    fetchServices();
-  }, [session, router]);
-
-  if (!session?.user?.isAdmin) {
-    return null;
-  }
-
+  // Define all functions before any conditional returns
   const handleAddPhoto = () => {
     if (!newPhotoUrl) {
       setError('Please enter a photo URL');
@@ -120,6 +98,30 @@ export default function CreateProject() {
     const selectedServices = Array.from(e.target.selectedOptions, option => option.value);
     setServices(selectedServices);
   };
+
+  useEffect(() => {
+    // Redirect if not admin
+    if (!session?.user?.isAdmin) {
+      router.push('/');
+      return;
+    }
+
+    const fetchServices = async () => {
+      try {
+        const res = await fetch('/api/services');
+        if (!res.ok) throw new Error('Failed to fetch services');
+        const data = await res.json();
+        setAvailableServices(data);
+      } catch (err) {
+        setError('Failed to load services');
+      }
+    };
+    fetchServices();
+  }, [session, router]);
+
+  if (!session?.user?.isAdmin) {
+    return null;
+  }
 
   return (
     <Container className="py-5">
@@ -251,10 +253,12 @@ export default function CreateProject() {
             <div className="d-flex gap-2 flex-wrap">
               {photos.map((photo, index) => (
                 <div key={index} className="position-relative">
-                  <img
+                  <Image
                     src={photo}
                     alt={`Project photo ${index + 1}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                    width={100}
+                    height={100}
+                    style={{ objectFit: 'cover' }}
                   />
                   <Button
                     variant="danger"

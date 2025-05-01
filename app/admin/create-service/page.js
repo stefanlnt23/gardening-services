@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Container, Form, Button, Alert, Row, Col } from 'react-bootstrap';
+import Image from 'next/image';
 
 export default function CreateService() {
   const { data: session, status } = useSession();
@@ -260,11 +261,13 @@ export default function CreateService() {
               {formData.photos.map((photo, index) => (
                 <Col key={index} md={4}>
                   <div className="position-relative">
-                    <img
+                    <Image
                       src={photo}
                       alt={`Service photo ${index + 1}`}
-                      className="img-fluid rounded"
-                      style={{ height: '200px', width: '100%', objectFit: 'cover' }}
+                      width={300}
+                      height={200}
+                      className="rounded"
+                      style={{ objectFit: 'cover' }}
                     />
                     <Button
                       variant="danger"

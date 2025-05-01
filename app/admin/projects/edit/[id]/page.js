@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 import { use } from 'react';
+import Image from 'next/image';
 
 export default function EditProject({ params: paramsPromise }) {
   const params = use(paramsPromise);
@@ -25,46 +26,7 @@ export default function EditProject({ params: paramsPromise }) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    // Redirect if not admin
-    if (!session?.user?.isAdmin) {
-      router.push('/');
-      return;
-    }
-
-    const fetchData = async () => {
-      try {
-        // Fetch project data
-        const projectResponse = await fetch(`/api/projects/${params.id}`);
-        if (!projectResponse.ok) {
-          throw new Error('Failed to fetch project');
-        }
-        const projectData = await projectResponse.json();
-        setTitle(projectData.title);
-        setDescription(projectData.description);
-        setClientName(projectData.clientName || '');
-        setLocation(projectData.location || '');
-        setCompletionDate(projectData.completionDate ? new Date(projectData.completionDate).toISOString().split('T')[0] : '');
-        setServices(projectData.services || []);
-        setStatus(projectData.status || 'In Progress');
-        setFeatured(projectData.featured || false);
-        setPhotos(projectData.photos || []);
-
-        // Fetch available services
-        const servicesResponse = await fetch('/api/services');
-        if (!servicesResponse.ok) throw new Error('Failed to fetch services');
-        const servicesData = await servicesResponse.json();
-        setAvailableServices(servicesData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [params.id, session, router]);
-
+  // Define all functions before any conditional returns
   const handleAddPhoto = () => {
     if (!newPhotoUrl) {
       setError('Please enter a photo URL');
@@ -77,6 +39,10 @@ export default function EditProject({ params: paramsPromise }) {
     setPhotos(prevPhotos => [...prevPhotos, newPhotoUrl]);
     setNewPhotoUrl('');
     setError('');
+  };
+
+  const removePhoto = (index) => {
+    setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -122,9 +88,45 @@ export default function EditProject({ params: paramsPromise }) {
     }
   };
 
-  const removePhoto = (index) => {
-    setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
-  };
+  useEffect(() => {
+    // Redirect if not admin
+    if (!session?.user?.isAdmin) {
+      router.push('/');
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch project data
+        const projectResponse = await fetch(`/api/projects/${params.id}`);
+        if (!projectResponse.ok) {
+          throw new Error('Failed to fetch project');
+        }
+        const projectData = await projectResponse.json();
+        setTitle(projectData.title);
+        setDescription(projectData.description);
+        setClientName(projectData.clientName || '');
+        setLocation(projectData.location || '');
+        setCompletionDate(projectData.completionDate ? new Date(projectData.completionDate).toISOString().split('T')[0] : '');
+        setServices(projectData.services || []);
+        setStatus(projectData.status || 'In Progress');
+        setFeatured(projectData.featured || false);
+        setPhotos(projectData.photos || []);
+
+        // Fetch available services
+        const servicesResponse = await fetch('/api/services');
+        if (!servicesResponse.ok) throw new Error('Failed to fetch services');
+        const servicesData = await servicesResponse.json();
+        setAvailableServices(servicesData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [params.id, session, router]);
 
   if (loading) return <div className="text-center mt-5">Loading...</div>;
 
@@ -258,10 +260,12 @@ export default function EditProject({ params: paramsPromise }) {
             <div className="d-flex gap-2 flex-wrap">
               {photos.map((photo, index) => (
                 <div key={index} className="position-relative">
-                  <img
+                  <Image
                     src={photo}
                     alt={`Project photo ${index + 1}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                    width={100}
+                    height={100}
+                    style={{ objectFit: 'cover' }}
                   />
                   <Button
                     variant="danger"
