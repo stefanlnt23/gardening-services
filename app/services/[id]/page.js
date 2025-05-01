@@ -164,45 +164,62 @@ export default function ServiceDetail() {
             <div className="bg-white rounded-3 shadow-sm p-4 mb-4">
               <h2 className="h4 text-success mb-4">Benefits</h2>
               <Row className="g-4">
-                <Col md={6}>
-                  <div className="d-flex align-items-start">
-                    <i className="fas fa-check-circle text-success me-2 mt-1"></i>
-                    <div>
-                      <h3 className="h6 mb-2">Increased Property Value</h3>
-                      <p className="text-muted small mb-0">
-                        A well-designed garden can significantly increase your property&apos;s market value.
-                      </p>
-                    </div>
-                  </div>
-                </Col>
-                <Col md={6}>
-                  <div className="d-flex align-items-start">
-                    <i className="fas fa-check-circle text-success me-2 mt-1"></i>
-                    <div>
-                      <h3 className="h6 mb-2">Enhanced Outdoor Living</h3>
-                      <p className="text-muted small mb-0">
-                        Create a beautiful space for relaxation, entertainment, and family activities.
-                      </p>
-                    </div>
-                  </div>
-                </Col>
+                {service.benefits ? (
+                  service.benefits.split('\n').filter(item => item.trim()).map((item, index) => (
+                    <Col md={6} key={index}>
+                      <div className="d-flex align-items-start">
+                        <i className="fas fa-check-circle text-success me-2 mt-1"></i>
+                        <div>
+                          <p className="mb-0">{item}</p>
+                        </div>
+                      </div>
+                    </Col>
+                  ))
+                ) : (
+                  <>
+                    <Col md={6}>
+                      <div className="d-flex align-items-start">
+                        <i className="fas fa-check-circle text-success me-2 mt-1"></i>
+                        <div>
+                          <h3 className="h6 mb-2">Increased Property Value</h3>
+                          <p className="text-muted small mb-0">
+                            A well-designed garden can significantly increase your property&apos;s market value.
+                          </p>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      <div className="d-flex align-items-start">
+                        <i className="fas fa-check-circle text-success me-2 mt-1"></i>
+                        <div>
+                          <h3 className="h6 mb-2">Enhanced Outdoor Living</h3>
+                          <p className="text-muted small mb-0">
+                            Create a beautiful space for relaxation, entertainment, and family activities.
+                          </p>
+                        </div>
+                      </div>
+                    </Col>
+                  </>
+                )}
               </Row>
             </div>
 
             {/* What's Included */}
-            <div className="bg-white rounded-3 shadow-sm p-4 mb-4">
-              <h2 className="h4 text-success mb-4">What&apos;s Included</h2>
-              <Row>
-                <Col md={6}>
-                  {service.whatsIncluded.split('\n').map((item, index) => (
-                    <div key={index} className="d-flex align-items-center mb-3">
-                      <i className="fas fa-check text-success me-2"></i>
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </Col>
-              </Row>
-            </div>
+            {service.whatsIncluded && (
+              <div className="bg-white rounded-3 shadow-sm p-4 mb-4">
+                <h2 className="h4 text-success mb-4">What&apos;s Included</h2>
+                <Row>
+                  <Col md={6}>
+                    {service.whatsIncluded.split('\n').filter(item => item.trim()).map((item, index) => (
+                      <div key={index} className="d-flex align-items-center mb-3">
+                        <i className="fas fa-check text-success me-2"></i>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </Col>
+                </Row>
+              </div>
+            )}
           </Col>
 
           {/* Service Details Card */}
