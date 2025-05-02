@@ -76,25 +76,41 @@ export default function ServiceDetail() {
           return;
         }
         
-        // Add a small delay to ensure MongoDB connection is ready
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Added retry logic to handle potential model registration timing issues
+        let attempts = 0;
+        const maxAttempts = 3;
         
-        const res = await fetch(`/api/services/${params.id}`, {
-          cache: 'no-store', // Disable caching to ensure fresh data
-          headers: {
-            'Accept': 'application/json',
+        while (attempts < maxAttempts) {
+          try {
+            const res = await fetch(`/api/services/${params.id}`, {
+              cache: 'no-store', // Disable caching to ensure fresh data
+              headers: {
+                'Accept': 'application/json',
+              }
+            });
+            
+            const data = await res.json();
+            
+            if (!res.ok) {
+              console.error('Error response from API:', data);
+              throw new Error(data.error || 'Failed to load service details');
+            }
+            
+            console.log('Service data received:', data._id);
+            setService(data);
+            return; // Success, exit the retry loop
+          } catch (fetchError) {
+            attempts++;
+            console.log(`Attempt ${attempts} failed, ${maxAttempts - attempts} remaining`);
+            
+            if (attempts >= maxAttempts) {
+              throw fetchError; // Give up after max attempts
+            }
+            
+            // Wait longer between each retry
+            await new Promise(resolve => setTimeout(resolve, 800 * attempts));
           }
-        });
-        
-        const data = await res.json();
-        
-        if (!res.ok) {
-          console.error('Error response from API:', data);
-          throw new Error(data.error || 'Failed to load service details');
         }
-        
-        console.log('Service data received:', data._id);
-        setService(data);
       } catch (err) {
         console.error('Error fetching service:', err);
         setError(`Failed to load service details: ${err.message}`);

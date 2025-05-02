@@ -1,16 +1,19 @@
+
 import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
 import Service from '@/models/Service';
+import '@/models/Category'; // Import Category model explicitly to ensure it's registered
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
 // GET service by ID
 export async function GET(request, { params }) {
   try {
-    console.log('Service detail API called for ID:', params.id);
+    const id = params.id;
+    console.log('Service detail API called for ID:', id);
     
-    if (!params.id) {
-      console.error('Invalid service ID provided:', params.id);
+    if (!id) {
+      console.error('Invalid service ID provided:', id);
       return NextResponse.json(
         { error: 'Invalid service ID' },
         { status: 400 }
@@ -18,14 +21,14 @@ export async function GET(request, { params }) {
     }
 
     await connectToDatabase();
-    console.log('Database connected, attempting to find service with ID:', params.id);
+    console.log('Database connected, attempting to find service with ID:', id);
     
     try {
-      const service = await Service.findById(params.id)
+      const service = await Service.findById(id)
         .populate('category', 'name');
       
       if (!service) {
-        console.log('Service not found for ID:', params.id);
+        console.log('Service not found for ID:', id);
         return NextResponse.json(
           { error: 'Service not found' },
           { status: 404 }
