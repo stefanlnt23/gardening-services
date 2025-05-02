@@ -1,0 +1,48 @@
+    at GET (app/api/services/[id]/route.js:12:16)
+  10 |     console.log('Service detail API called for ID:', params.id);
+  11 |     
+> 12 |     if (!params.id) {
+     |                ^
+  13 |       console.error('Invalid service ID provided:', params.id);
+  14 |       return NextResponse.json(
+  15 |         { error: 'Invalid service ID' },
+Using existing connection promise
+Connected to MongoDB successfully
+Error: Route "/api/services/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/services/[id]/route.js:21:82)
+  19 |
+  20 |     await connectToDatabase();
+> 21 |     console.log('Database connected, attempting to find service with ID:', params.id);
+     |                                                                                  ^
+  22 |     
+  23 |     try {
+  24 |       const service = await Service.findById(params.id)
+Database connected, attempting to find service with ID: 6813b9c88ac90a5815af4b92
+Error: Route "/api/services/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/services/[id]/route.js:24:52)
+  22 |     
+  23 |     try {
+> 24 |       const service = await Service.findById(params.id)
+     |                                                    ^
+  25 |         .populate('category', 'name');
+  26 |       
+  27 |       if (!service) {
+Error: Route "/api/services/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/services/[id]/route.js:21:82)
+  19 |
+  20 |     await connectToDatabase();
+> 21 |     console.log('Database connected, attempting to find service with ID:', params.id);
+     |                                                                                  ^
+  22 |     
+  23 |     try {
+  24 |       const service = await Service.findById(params.id)
+Database connected, attempting to find service with ID: 6813b9c88ac90a5815af4b92
+Error: Route "/api/services/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/services/[id]/route.js:24:52)
+  22 |     
+  23 |     try {
+> 24 |       const service = await Service.findById(params.id)
+     |                                                    ^
+  25 |         .populate('category', 'name');
+  26 |       
+  27 |       if (!service) {
